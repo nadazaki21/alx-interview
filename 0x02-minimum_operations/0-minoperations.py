@@ -30,4 +30,4 @@ def minOperations(n):
 
     operations = operations + remaining_steps
 
-    return int(operations - 1)
+    return int(operations)
