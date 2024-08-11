@@ -7,27 +7,16 @@ of operations needed to result in exactly n H characters"""
 
 
 def minOperations(n):
-    """calculates the fewest number of operations needed
-    to result in exactly n H characters
-    """
-    operations = 2
-    divisor = 0
-    lmc = 0
-    for i in range(2, 10):
-        if n % i == 0:
-            divisor = i
-            if lmc < divisor:
-                lmc = divisor
-
-    if lmc == 0:
+    if n <= 1:
         return 0
-
-    intial_steps = lmc - 2
-    operations += intial_steps
-
-    if lmc != 0:
-        remaining_steps = n / lmc
-
-    operations = operations + remaining_steps
-
-    return int(operations)
+    
+    operations = 0
+    factor = 2
+    
+    while n > 1:
+        while n % factor == 0:
+            operations += factor
+            n //= factor
+        factor += 1
+        
+    return operations
