@@ -19,7 +19,7 @@ def minOperations(n):
             if lmc < divisor:
                 lmc = divisor
 
-    print(f"lmc = {lmc}")
+    #print(f"lmc = {lmc}")
     if lmc == 0:
         return 0
 
