@@ -1,20 +1,32 @@
 #!/usr/bin/node
-const util = require('util');
-const request = util.promisify(require('request'));
-const filmID = process.argv[2];
 
-async function starwarsCharacters (filmId) {
-  const endpoint = 'https://swapi-api.hbtn.io/api/films/' + filmId;
-  let response = await (await request(endpoint)).body;
-  response = JSON.parse(response);
-  const characters = response.characters;
+const axios = require('axios');
 
-  for (let i = 0; i < characters.length; i++) {
-    const urlCharacter = characters[i];
-    let character = await (await request(urlCharacter)).body;
-    character = JSON.parse(character);
-    console.log(character.name);
-  }
+async function getStarWarsCharacters(movieId) {
+    try {
+        // Fetch film details from the Star Wars API
+        const filmResponse = await axios.get(`https://swapi.dev/api/films/${movieId}/`);
+        const filmData = filmResponse.data;
+
+        // Extract the character URLs from the film data
+        const characters = filmData.characters;
+
+        // Print each character's name
+        for (const characterUrl of characters) {
+            const characterResponse = await axios.get(characterUrl);
+            const characterData = characterResponse.data;
+            console.log(characterData.name);
+        }
+    } catch (error) {
+        console.error(`Error: ${error.response ? error.response.data.detail : error.message}`);
+    }
 }
 
-starwarsCharacters(filmID);
+// Get the movie ID from command line arguments
+const movieId = process.argv[2];
+
+if (!movieId) {
+    console.log("Usage: node script.js <Movie ID>");
+} else {
+    getStarWarsCharacters(movieId);
+}
